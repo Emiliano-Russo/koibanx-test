@@ -1,20 +1,33 @@
 import { Button } from "antd";
-import { Data } from "../../data";
+import { Store } from "../../fake_api";
 
 interface TableProps {
-  headers: string[];
-  data: Data[];
-  //textFilter: string;
-  //activeFilter: boolean;
+  data: Store[];
+  page: number;
 }
 
 export function Table(props: TableProps) {
+  const tableHeader = [
+    "ID",
+    "Comercio",
+    "CUIT",
+    "Concepto1",
+    "Concepto2",
+    "Concepto3",
+    "Concepto4",
+    "Concepto5",
+    "Concepto6",
+    "Balance Actual",
+    "Activo",
+    "Ultima Venta",
+  ];
+
   return (
     <div style={{ marginTop: "50px" }}>
       <table style={{ border: "1px solid black" }}>
         <thead>
           <tr>
-            {props.headers.map((value) => {
+            {tableHeader.map((value) => {
               if (value === "ID" || value === "Comercio" || value === "CUIT")
                 return (
                   <th style={{ border: "1px solid black", padding: "10px" }}>
@@ -53,6 +66,7 @@ export function Table(props: TableProps) {
           })}
         </tbody>
       </table>
+      <p>Page: {props.page}</p>
     </div>
   );
 }

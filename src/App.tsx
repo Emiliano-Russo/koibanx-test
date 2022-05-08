@@ -3,50 +3,47 @@ import "./App.css";
 import { Table } from "./components/Table/Table";
 import { Search } from "./components/Search/Search";
 import "antd/dist/antd.css";
-import { Data, info } from "./data";
+import { Store, fake_api } from "./fake_api";
+import { Button } from "antd";
 
 function App() {
-  const [dataInfo, setDataInfo] = useState<Data[]>([]);
-  const [textFilter, setTextFilter] = useState("");
-  const [onlyActives, setOnlyActives] = useState(false);
+  const [actualPage, setActualPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [stores, setStores] = useState<Store[]>([]);
 
   useEffect(() => {
-    setDataInfo(info);
-  }, []);
+    const response = fake_api.getStores(actualPage);
+    setStores(response.data);
+    setTotalPages(Math.ceil(response.pages));
+  }, [actualPage]);
 
   const changeTextHandler = (text: string) => {
-    console.log("TEXT: " + text);
+    const url = process.env.REACT_APP_URL;
+    //Return documents that matches at least one of the elements in an array field.
+    const query = `${url}?q={'store':{'$elemMatch':{'ID':'${text}', 'CUIT':'${text}', 'Comercio':'${text}'}}}`;
+    console.log(query);
   };
 
   const changeCheckHandler = (value: boolean) => {
-    if (value) {
-      setDataInfo((prev) => {
-        return prev.filter((value) => value.Activo);
-      });
-    } else {
-      setDataInfo(info);
-    }
+    value
+      ? setStores((prev) => {
+          return prev.filter((value) => value.Activo);
+        })
+      : setStores(fake_api.getStores(actualPage).data);
   };
-
-  const tableHeader = [
-    "ID",
-    "Comercio",
-    "CUIT",
-    "Concepto1",
-    "Concepto2",
-    "Concepto3",
-    "Concepto4",
-    "Concepto5",
-    "Concepto6",
-    "Balance Actual",
-    "Activo",
-    "Ultima Venta",
-  ];
 
   return (
     <div className="App">
       <Search onChange={changeTextHandler} onChangeCheckBox={changeCheckHandler} />
-      <Table data={dataInfo} headers={tableHeader} />
+      <Table data={stores} page={actualPage} />
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <Button disabled={actualPage === 1} onClick={() => setActualPage((prev) => prev - 1)}>
+          Prev
+        </Button>
+        <Button disabled={actualPage === totalPages} onClick={() => setActualPage((prev) => prev + 1)}>
+          Next
+        </Button>
+      </div>
     </div>
   );
 }
