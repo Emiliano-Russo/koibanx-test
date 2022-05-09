@@ -76,7 +76,8 @@ function App() {
   };
 
   const changeTextHandler = (text: string) => {
-    const url = process.env.REACT_APP_URL;
+    const url = "https://api.koibanx.com/stores";
+
     //Return documents that matches at least one of the elements in an array field.
     const query = `${url}?q={'store':{'$elemMatch':{'ID':'${text}', 'CUIT':'${text}', 'Comercio':'${text}'}}}`;
     console.log(query);

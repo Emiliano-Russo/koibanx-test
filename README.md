@@ -2,13 +2,6 @@
 
 [Proyecto en Vercel](https://koibanx-test.vercel.app/)
 
-**Importante!**
-Antes de iniciar el proyecto se deberá crear un archivo .env con la variable:
-REACT_APP_URL = "www.TU URL DEL SERVIDOR API .com"
-
-De todas formas puede ser cualquier string ya que la misma no será consultada.
-Esto tiene la finalidad de poder ver las querys formadas en consola.
-
 **Consideraciones**
 
 El punto "d" de los requerimientos nos dice "lo importante es cómo se forman los
