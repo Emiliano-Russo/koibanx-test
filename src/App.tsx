@@ -41,6 +41,7 @@ function App() {
   const applyFilters = (storeList: IStore[]) => {
     let filteredStore = applyActiveFilter(storeList);
     filteredStore = applySort(filteredStore);
+    filteredStore = applyText(filteredStore);
     return filteredStore;
   };
 
@@ -53,9 +54,8 @@ function App() {
   };
 
   const applySort = (storeList: IStore[]) => {
-    console.log(" *** applySort *** ");
     if (filterSheet.sorted.direction === SortState.Nothing) return storeList;
-    const sortedArray = clone(stores).sort((a: IStore, b: IStore) => {
+    const sortedArray = storeList.slice(0).sort((a: IStore, b: IStore) => {
       return a[filterSheet.sorted.field] > b[filterSheet.sorted.field]
         ? 1
         : a[filterSheet.sorted.field] == b[filterSheet.sorted.field]
@@ -65,16 +65,27 @@ function App() {
     return filterSheet.sorted.direction === SortState.Acending ? sortedArray : sortedArray.reverse();
   };
 
+  const applyText = (storeList: IStore[]) => {
+    if (filterSheet.text.length === 0) return storeList;
+    const array = storeList.filter((store) => {
+      const resultComercio = store.Comercio.toLowerCase().includes(filterSheet.text.toLowerCase());
+      const resultCUIT = store.CUIT.toLowerCase().includes(filterSheet.text.toLowerCase());
+      const resultID = store.ID.toLowerCase().includes(filterSheet.text.toLowerCase());
+      return resultCUIT || resultComercio || resultID;
+    });
+    return array;
+  };
+
   const changeTextHandler = (text: string) => {
     const url = process.env.REACT_APP_URL;
     //Return documents that matches at least one of the elements in an array field.
     const query = `${url}?q={'store':{'$elemMatch':{'ID':'${text}', 'CUIT':'${text}', 'Comercio':'${text}'}}}`;
     console.log(query);
-    /*setFilterSheet((prev) => {
+    setFilterSheet((prev) => {
       const prevCloned: ActiveFilters = clone(prev);
-      prevCloned.text = query;
+      prevCloned.text = text;
       return prevCloned;
-    });*/
+    });
   };
 
   const changeCheckHandler = (value: boolean) => {
