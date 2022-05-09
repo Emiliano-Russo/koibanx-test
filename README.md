@@ -1,5 +1,7 @@
 # Prueba técnica para Koibanx
 
+[Proyecto en Vercel](https://koibanx-test.vercel.app/)
+
 **Importante!**
 Antes de iniciar el proyecto se deberá crear un archivo .env con la variable:
 REACT_APP_URL = "www.TU URL DEL SERVIDOR API .com"
