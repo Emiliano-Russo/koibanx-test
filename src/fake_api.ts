@@ -53,7 +53,7 @@ class Fake_api {
     const response: Response = {
       data: this.storeData.slice(start, end),
       page: page,
-      pages: this.storeData.length / this.rowsPerPage,
+      pages: Math.ceil(this.storeData.length / this.rowsPerPage),
       rowsPerPage: this.rowsPerPage,
       total: this.storeData.length,
     };

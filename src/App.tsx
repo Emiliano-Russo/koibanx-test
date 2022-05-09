@@ -32,10 +32,9 @@ function App() {
   });
 
   useEffect(() => {
-    console.log("------ APP USE EFFECT -----");
     const response = fake_api.getStores(actualPage);
     setStores(applyFilters(response.data));
-    setTotalPages(Math.ceil(response.pages));
+    setTotalPages(response.pages);
   }, [filterSheet, actualPage]);
 
   const applyFilters = (storeList: IStore[]) => {
@@ -107,11 +106,10 @@ function App() {
   const movePage = (forward: boolean) => {
     forward ? setActualPage((prev) => prev + 1) : setActualPage((prev) => prev - 1);
   };
-
   return (
     <div className="App">
       <Search onChange={changeTextHandler} onChangeCheckBox={changeCheckHandler} />
-      <Table data={stores} page={actualPage} sort={sortHandler} />
+      <Table data={stores} pagination={actualPage + "/" + totalPages} sort={sortHandler} />
       <div style={{ display: "flex", flexDirection: "row" }}>
         <Button
           disabled={actualPage === 1}

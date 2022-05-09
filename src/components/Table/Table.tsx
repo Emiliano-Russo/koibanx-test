@@ -4,7 +4,7 @@ import { IStore, IStoreToString } from "../../fake_api";
 
 interface TableProps {
   data: IStore[];
-  page: number;
+  pagination: string;
   sort: (field: Field, sortState: SortState) => void;
 }
 
@@ -103,7 +103,7 @@ export function Table(props: TableProps) {
           })}
         </tbody>
       </table>
-      <p>Page: {props.page}</p>
+      <p>Page: {props.pagination}</p>
     </div>
   );
 }
