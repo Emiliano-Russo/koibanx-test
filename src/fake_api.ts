@@ -1,6 +1,6 @@
 import { stores_db } from "./data";
 
-export interface Store {
+export interface IStore {
   ID: string;
   Comercio: string;
   CUIT: string;
@@ -15,8 +15,23 @@ export interface Store {
   UltimaVenta: Date;
 }
 
+export const IStoreToString = [
+  "ID",
+  "Comercio",
+  "CUIT",
+  "Concepto1",
+  "Concepto2",
+  "Concepto3",
+  "Concepto4",
+  "Concepto5",
+  "Concepto6",
+  "Balance Actual",
+  "Activo",
+  "Ultima Venta",
+];
+
 export interface Response {
-  data: Store[];
+  data: IStore[];
   page: number; // page to show
   pages: number; // total pages
   rowsPerPage: number; //how many stores per page
@@ -24,10 +39,10 @@ export interface Response {
 }
 
 class Fake_api {
-  storeData: Store[];
+  storeData: IStore[];
   rowsPerPage: number;
 
-  constructor(storeData: Store[], rowsPerPage: number) {
+  constructor(storeData: IStore[], rowsPerPage: number) {
     this.storeData = storeData;
     this.rowsPerPage = rowsPerPage;
   }

@@ -1,37 +1,74 @@
 import { Button } from "antd";
-import { Store } from "../../fake_api";
+import { useEffect, useState } from "react";
+import { IStore, IStoreToString } from "../../fake_api";
 
 interface TableProps {
-  data: Store[];
+  data: IStore[];
   page: number;
+  sort: (field: Field, sortState: SortState) => void;
+}
+
+export enum SortState {
+  Acending = "^",
+  Descending = "∨",
+  Nothing = "-",
+}
+
+export enum Field {
+  Comercio = "Comercio",
+  CUIT = "CUIT",
 }
 
 export function Table(props: TableProps) {
-  const tableHeader = [
-    "ID",
-    "Comercio",
-    "CUIT",
-    "Concepto1",
-    "Concepto2",
-    "Concepto3",
-    "Concepto4",
-    "Concepto5",
-    "Concepto6",
-    "Balance Actual",
-    "Activo",
-    "Ultima Venta",
-  ];
+  const [symbolComercio, setSymbolComercio] = useState(SortState.Nothing);
+  const [symbolCUIT, setSymbolCUIT] = useState(SortState.Nothing);
+
+  function getNextSortState(field: Field): SortState {
+    return field === Field.CUIT ? nextSortState(symbolCUIT) : nextSortState(symbolComercio);
+  }
+
+  function nextSortState(state: SortState) {
+    switch (state) {
+      case SortState.Acending:
+        return SortState.Descending;
+        break;
+      case SortState.Descending:
+        return SortState.Nothing;
+        break;
+      case SortState.Nothing:
+        return SortState.Acending;
+        break;
+    }
+  }
 
   return (
     <div style={{ marginTop: "50px" }}>
       <table style={{ border: "1px solid black" }}>
         <thead>
           <tr>
-            {tableHeader.map((value) => {
-              if (value === "ID" || value === "Comercio" || value === "CUIT")
+            {IStoreToString.map((value) => {
+              if (value === "Comercio" || value === "CUIT")
                 return (
                   <th style={{ border: "1px solid black", padding: "10px" }}>
-                    <Button size="small">^</Button>
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        if (value === "Comercio") {
+                          const next = getNextSortState(Field.Comercio);
+                          setSymbolComercio(next);
+                          setSymbolCUIT(SortState.Nothing);
+                          props.sort(Field.Comercio, next);
+                        } else if (value === "CUIT") {
+                          const next = getNextSortState(Field.CUIT);
+                          setSymbolCUIT(next);
+                          setSymbolComercio(SortState.Nothing);
+                          props.sort(Field.CUIT, next);
+                        }
+                      }}
+                      style={{ marginRight: "5px" }}
+                    >
+                      {value === "CUIT" ? symbolCUIT : symbolComercio}
+                    </Button>
                     {value}
                   </th>
                 );

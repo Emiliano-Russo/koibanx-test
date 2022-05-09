@@ -1,6 +1,6 @@
-import { Store } from "./fake_api";
+import { IStore } from "./fake_api";
 
-export const stores_db: Store[] = [
+export const stores_db: IStore[] = [
   {
     ID: "1",
     Comercio: "Pizza Family",
